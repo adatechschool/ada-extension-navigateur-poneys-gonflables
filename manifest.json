@@ -1,6 +1,6 @@
 {
     "manifst_version":3,
-    "name":"WebClippy",
+    "name":"DefineAssistant",
     "version":0.1,
     "description":"Recherche de définitions",
     "action": {
