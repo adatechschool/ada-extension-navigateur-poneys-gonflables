@@ -1,0 +1,13 @@
+{
+    "manifst_version":3,
+    "name":"WebClippy",
+    "version":0.1,
+    "description":"Recherche de définitions",
+    "action": {
+
+    },
+    "permissions": ["activeTab",
+    "contextMenus",
+    "storage"],
+    "host-premissions": ["https://*/*"]
+}
