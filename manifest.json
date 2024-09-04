@@ -1,13 +1,31 @@
 {
-    "manifst_version":3,
-    "name":"DefineAssistant",
-    "version":0.1,
-    "description":"Recherche de définitions",
-    "action": {
-
+    "manifest_version": 3,
+    "name": "DefineAssistant",
+    "version": "0.1",
+    "description": "Recherche de définitions",
+    "action": {},
+    "permissions": [
+        "activeTab",
+        "contextMenus",
+        "storage",
+        "scripting"
+    ],
+    "host-premissions": [
+        "https://*/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
     },
-    "permissions": ["activeTab",
-    "contextMenus",
-    "storage"],
-    "host-premissions": ["https://*/*"]
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "mergev1.js",
+                "get.js",
+                "sprite.js"
+            ]
+        }
+    ]
 }
