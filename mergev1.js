@@ -31,6 +31,7 @@ async function fetchDefinition(word) {
 // Liste des sprites
 const spriteList = [
     'Spritsheet/perso1.PNG',
+    '/Spritsheet/perso1.PNG',
     'img/perso2.PNG',
     'img/perso3.PNG',
     'img/perso4.PNG'
@@ -40,6 +41,7 @@ let spriteInterval; // Variable pour stocker l'intervalle d'animation des sprite
 
 // Fonction pour changer l'image du sprite dans la popup
 function changeSprite() {
+/*function changeSprite() {
     const spriteImg = document.querySelector("#definition-popup img");
 
     let index = 0;
@@ -48,6 +50,7 @@ function changeSprite() {
         index = (index + 1) % spriteList.length;
     }, 500); // Change l'image toutes les 500 ms
 }
+}*/
 
 // Fonction pour afficher la popup avec la définition et les sprites
 function showDefinitionPopup(event, definition) {
@@ -59,6 +62,7 @@ function showDefinitionPopup(event, definition) {
 
     // Mise à jour du contenu et de la position de la popup
     popup.innerHTML = `<p>${definition}</p>`; // Utilisation de innerHTML pour permettre du HTML dans la définition
+    popup.innerHTML = `<p>${definition}</p><img src="${spriteList[0]}" alt="Sprite">`; // Utilisation de innerHTML pour permettre du HTML dans la définition
 
     // Ajouter un élément img pour les sprites si non existant
     if (!popup.querySelector("img")) {
@@ -72,6 +76,7 @@ function showDefinitionPopup(event, definition) {
 
     // Démarrer l'animation des sprites
     changeSprite();
+    /*changeSprite();*/
 }
 
 // Fonction pour cacher la popup et arrêter l'animation des sprites
@@ -113,6 +118,7 @@ async function handleWordHover(event, word) {
 
 // Ajouter un événement au survol de la souris
 document.addEventListener("mousemove", async (event) => {
+document.addEventListener("mousedown", async (event) => {
     const selectedText = textSelection();
 
     // Si du texte est sélectionné et que l'événement se produit sur un élément HTML
@@ -126,5 +132,6 @@ document.addEventListener("mousemove", async (event) => {
 
 // Ajouter un événement lorsque la souris quitte l'élément
 document.addEventListener("mouseout", () => {
+document.addEventListener("mouseup", () => {
     hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
 });
