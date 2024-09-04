@@ -30,7 +30,6 @@ async function fetchDefinition(word) {
 
 // Liste des sprites
 const spriteList = [
-    'Spritsheet/perso1.PNG',
     '/Spritsheet/perso1.PNG',
     'img/perso2.PNG',
     'img/perso3.PNG',
@@ -40,7 +39,6 @@ const spriteList = [
 let spriteInterval; // Variable pour stocker l'intervalle d'animation des sprites
 
 // Fonction pour changer l'image du sprite dans la popup
-function changeSprite() {
 /*function changeSprite() {
     const spriteImg = document.querySelector("#definition-popup img");
 
@@ -49,7 +47,6 @@ function changeSprite() {
         spriteImg.src = spriteList[index];
         index = (index + 1) % spriteList.length;
     }, 500); // Change l'image toutes les 500 ms
-}
 }*/
 
 // Fonction pour afficher la popup avec la définition et les sprites
@@ -61,7 +58,6 @@ function showDefinitionPopup(event, definition) {
     const posY = event.pageY + 10;
 
     // Mise à jour du contenu et de la position de la popup
-    popup.innerHTML = `<p>${definition}</p>`; // Utilisation de innerHTML pour permettre du HTML dans la définition
     popup.innerHTML = `<p>${definition}</p><img src="${spriteList[0]}" alt="Sprite">`; // Utilisation de innerHTML pour permettre du HTML dans la définition
 
     // Ajouter un élément img pour les sprites si non existant
@@ -75,7 +71,6 @@ function showDefinitionPopup(event, definition) {
     popup.style.display = "block"; // Afficher la popup
 
     // Démarrer l'animation des sprites
-    changeSprite();
     /*changeSprite();*/
 }
 
@@ -117,7 +112,6 @@ async function handleWordHover(event, word) {
 }
 
 // Ajouter un événement au survol de la souris
-document.addEventListener("mousemove", async (event) => {
 document.addEventListener("mousedown", async (event) => {
     const selectedText = textSelection();
 
@@ -131,7 +125,6 @@ document.addEventListener("mousedown", async (event) => {
 });
 
 // Ajouter un événement lorsque la souris quitte l'élément
-document.addEventListener("mouseout", () => {
 document.addEventListener("mouseup", () => {
     hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
 });
