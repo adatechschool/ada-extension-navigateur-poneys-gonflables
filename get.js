@@ -1,9 +1,11 @@
-
+//selectionne un morceau de texte
 
 function textSelection(){
     selectedObject = document.getSelection();
     console.log(selectedObject);
-    selectedText = selectedObject.toString();
+    arrayToString = selectedObject.toString();
+    console.log(arrayToString)
+    selectedText = arrayToString.split(" ")[0];
     console.log(selectedText);
     return selectedText;
     }
