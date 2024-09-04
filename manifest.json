@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 {
     "manifst_version":3,
     "name":"DefineAssistant",
@@ -10,4 +11,26 @@
     "contextMenus",
     "storage"],
     "host-premissions": ["https://*/*"]
+=======
+{
+  "manifest_version": 3,
+  "name": "Définition au survol",
+  "version": "1.0",
+  "description": "Survolez un mot pour voir sa définition.",
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+       "js": ["multipoubelles.js"], 
+       "css": ["style.css"] 
+    }
+  ]
+>>>>>>> Stashed changes
 }
