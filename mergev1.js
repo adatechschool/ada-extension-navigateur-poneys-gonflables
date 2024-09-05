@@ -14,6 +14,7 @@ async function fetchDefinition(word) {
         const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
         const data = await response.json();
         
+
         // Vérifie si des données sont retournées et renvoie la définition
         if (data && data.length > 0 && data[0].meanings.length > 0 && data[0].meanings[0].definitions.length > 0) {
             return data[0].meanings[0].definitions[0].definition;
@@ -59,10 +60,14 @@ function showDefinitionPopup(event, definition) {
 
     // Mise à jour du contenu et de la position de la popup
     popup.innerHTML = `<p>${definition}</p><img src="${chrome.runtime.getURL('img/perso1.PNG')}" alt="Sprite"></img>` //Utilisation de innerHTML pour permettre du HTML dans la définition
+    popup.innerHTML = `<p>${definition}</p><img src="${chrome.runtime.getURL('img/perso1.PNG')}" alt="Sprite">` //Utilisation de innerHTML pour permettre du HTML dans la définition
 
     // Ajouter un élément img pour les sprites si non existant
     if (!popup.querySelector("img")) {
         const spriteImg = document.createElement("img");
+    let spriteImg = popup.querySelector("img");
+    if (!spriteImg) {
+        spriteImg = document.createElement("img");
         popup.appendChild(spriteImg);
     }
 
@@ -128,3 +133,5 @@ document.addEventListener("mouseup", async (event) => {
 document.addEventListener("mousedown", () => {
     hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
 });
+
+console.log(chrome.runtime.getURL("img/perso1.PNG"));
