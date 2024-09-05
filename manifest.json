@@ -27,5 +27,18 @@
                 "sprite.js"
             ]
         }
+    ],
+    "web_accessible_resources": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "resources": [
+                "Spritsheet/perso1.PNG",
+                "Spritsheet/perso2.PNG",
+                "Spritsheet/perso3.PNG",
+                "Spritsheet/perso4.PNG"
+            ]
+        }
     ]
 }

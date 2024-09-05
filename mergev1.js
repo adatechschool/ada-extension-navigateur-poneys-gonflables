@@ -30,10 +30,10 @@ async function fetchDefinition(word) {
 
 // Liste des sprites
 const spriteList = [
-    '/Spritsheet/perso1.PNG',
-    'img/perso2.PNG',
-    'img/perso3.PNG',
-    'img/perso4.PNG'
+    chrome.runtime.getURL('img/perso1.PNG'),
+    chrome.runtime.getURL('img/perso2.PNG'),
+    chrome.runtime.getURL('img/perso3.PNG'),
+    chrome.runtime.getURL('img/perso4.PNG')
 ];
 
 let spriteInterval; // Variable pour stocker l'intervalle d'animation des sprites
@@ -58,7 +58,7 @@ function showDefinitionPopup(event, definition) {
     const posY = event.pageY + 10;
 
     // Mise à jour du contenu et de la position de la popup
-    popup.innerHTML = `<p>${definition}</p><img src="${spriteList[0]}" alt="Sprite">`; // Utilisation de innerHTML pour permettre du HTML dans la définition
+    popup.innerHTML = `<p>${definition}</p><img src="${chrome.runtime.getURL('img/perso1.PNG')}" alt="Sprite"></img>` //Utilisation de innerHTML pour permettre du HTML dans la définition
 
     // Ajouter un élément img pour les sprites si non existant
     if (!popup.querySelector("img")) {
@@ -112,7 +112,7 @@ async function handleWordHover(event, word) {
 }
 
 // Ajouter un événement au survol de la souris
-document.addEventListener("mousedown", async (event) => {
+document.addEventListener("mouseup", async (event) => {
     const selectedText = textSelection();
 
     // Si du texte est sélectionné et que l'événement se produit sur un élément HTML
@@ -125,6 +125,6 @@ document.addEventListener("mousedown", async (event) => {
 });
 
 // Ajouter un événement lorsque la souris quitte l'élément
-document.addEventListener("mouseup", () => {
+document.addEventListener("mousedown", () => {
     hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
 });
