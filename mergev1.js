@@ -39,27 +39,6 @@ const spriteList = [
 let spriteInterval; // Variable pour stocker l'intervalle d'animation des sprites
 
 
-/* // Liste des sprites
-const spriteList = [
-    '/img/perso1.PNG',
-    '/img/perso2.PNG',
-    '/img/perso3.PNG',
-    '/img/perso4.PNG'
-];
-const spriteList.src = chrome.runtime.getURL("./perso1.PNG", "./perso2.PNG", "./perso3.PNG", ".perso4.png");
-let spriteInterval; // Variable pour stocker l'intervalle d'animation des sprites */
-
-// Fonction pour changer l'image du sprite dans la popup
-/*function changeSprite() {
-    const spriteImg = document.querySelector("#definition-popup img");
-
-    let index = 0;
-    spriteInterval = setInterval(() => {
-        spriteImg.src = spriteList[index];
-        index = (index + 1) % spriteList.length;
-    }, 500); // Change l'image toutes les 500 ms
-}*/
-
 // Fonction pour afficher la popup avec la définition et les sprites
 function showDefinitionPopup(event, definition) {
     const popup = document.getElementById("definition-popup");
@@ -85,8 +64,6 @@ function showDefinitionPopup(event, definition) {
 
 
 
-    // Démarrer l'animation des sprites
-    /*changeSprite();*/
 
 
 // Fonction pour cacher la popup et arrêter l'animation des sprites
