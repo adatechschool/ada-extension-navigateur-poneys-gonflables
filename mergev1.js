@@ -62,7 +62,7 @@ function showDefinitionPopup(event, definition) {
 
     // Ajouter un élément img pour les sprites si non existant
     let spriteImg = popup.querySelector("img");
-    if (!spriteImg) {
+    if (spriteImg===null) {
         spriteImg = document.createElement("img");
         popup.appendChild(spriteImg);
     }
@@ -74,6 +74,7 @@ function showDefinitionPopup(event, definition) {
     // Démarrer l'animation des sprites
     /*changeSprite();*/
 }
+
 
 // Fonction pour cacher la popup et arrêter l'animation des sprites
 function hideDefinitionPopup() {
@@ -90,6 +91,7 @@ function textSelection() {
     const selectedText = selectedObject.toString().trim();
 
     console.log("Texte sélectionné :", selectedText); // Debug
+    console.log(typeof(selectedText))
 
     return selectedText;
 }
@@ -119,15 +121,19 @@ document.addEventListener("mouseup", async (event) => {
     // Si du texte est sélectionné et que l'événement se produit sur un élément HTML
     if (selectedText && event.target.nodeType === Node.ELEMENT_NODE) {
         const word = selectedText.split(" ")[0]; // Prendre le premier mot
-
+        
         // Récupérer la définition du mot
         await handleWordHover(event, word);
     }
 });
+
+/*highlightText = textSelection()
+
+console.log("test",highlightText)*/
 
 // Ajouter un événement lorsque la souris quitte l'élément
 document.addEventListener("mousedown", () => {
     hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
 });
 
-console.log(chrome.runtime.getURL("img/perso1.PNG"));
+//console.log(chrome.runtime.getURL("img/perso1.PNG"));
