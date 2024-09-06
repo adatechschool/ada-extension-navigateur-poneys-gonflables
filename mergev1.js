@@ -137,3 +137,15 @@ document.addEventListener("mousedown", () => {
 });
 
 //console.log(chrome.runtime.getURL("img/perso1.PNG"));
+
+function addNote(event, note) {
+    let note = {};
+    const definition = document.createTextNode(note);
+    
+    if (note==null) {
+        showDefinitionPopup(event, definition);
+    } else {
+        note = text.nodeValue
+        showDefinitionPopup(event, definition);
+    }
+}
