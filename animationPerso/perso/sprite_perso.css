@@ -10,7 +10,7 @@ body {
     overflow: hidden;
 }
 
-.spritesheet{
+/* .spritesheet{
     background-repeat: no-repeat;
     animation: moveSpritesheet 4s infinite 
 }
@@ -31,4 +31,4 @@ body {
     100% {
         background-image: url('Spritsheet/perso1.PNG');  
     }
-}
+} */

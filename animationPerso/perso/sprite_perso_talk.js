@@ -1,14 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
     let spritelist = [
-        'Dinoimg/updino1.png',
-        'Dinoimg/updino2.png',
-        'Dinoimg/updino3.png',
-        'Dinoimg/updino2.png',
-        'Dinoimg/updino1.png',
-        'Dinoimg/updino4.png',
-        'Dinoimg/updino6.png',
-        'Dinoimg/updino4.png',
-        'Dinoimg/updino1.png'
+        'Spritsheet/perso1.PNG',
+        'Spritsheet/perso2.PNG',
+        'Spritsheet/perso3.PNG',
+        'Spritsheet/perso4.PNG'
     ];
 
     let spriteimg = document.querySelector(".sprite img");
@@ -27,11 +22,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (countdown < maxRepeats){
-            setTimeout (animateSprite,120) //changer de sprite toutes les 0.2s (recall animeteSprite de façon récursive)
+            setTimeout (animateSprite,200) //changer de sprite toutes les 0.2s (recall animeteSprite de façon récursive)
         }
     }
 
-    animateSprite() //Démarre l'animation 
-            
-      
+    animateSprite() //Démarre l'animations
 });

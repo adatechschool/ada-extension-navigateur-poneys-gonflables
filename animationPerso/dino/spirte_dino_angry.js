@@ -1,21 +1,35 @@
 document.addEventListener("DOMContentLoaded", function() {
     let spritelist = [
+        'Dinoimg/Happydino1.png',
+        'Dinoimg/Happydino2.png',
+        'Dinoimg/Happydino3.png',
+        'Dinoimg/Happydino4.png',
+        'Dinoimg/Happydino3.png',
+        'Dinoimg/Happydino4.png',
+        'Dinoimg/Happydino3.png',
+        'Dinoimg/Happydino4.png',
+        'Dinoimg/Happydino2.png',
+        'Dinoimg/AngryDino1.PNG',
+        'Dinoimg/AngryDino2.PNG',
+        'Dinoimg/AngryDino3.PNG',
+        'Dinoimg/AngryDino4.PNG',
+        'Dinoimg/AngryDino1.PNG',
+        'Dinoimg/AngryDino2.PNG',
+        'Dinoimg/AngryDino3.PNG',
+        'Dinoimg/AngryDino4.PNG',
+        'Dinoimg/AngryDino1.PNG',
         'Dinoimg/updino1.png',
         'Dinoimg/updino2.png',
-        'Dinoimg/updino3.png',
-        'Dinoimg/updino2.png',
         'Dinoimg/updino1.png',
-        'Dinoimg/updino4.png',
-        'Dinoimg/updino6.png',
-        'Dinoimg/updino4.png',
-        'Dinoimg/updino1.png'
+        'Dinoimg/AngryDino1.PNG'
+
     ];
 
     let spriteimg = document.querySelector(".sprite img");
 
     let countdown = 0
     let index = 0
-    let maxRepeats = 4
+    let maxRepeats = 1
 
     function animateSprite() {
         //coeur de la fonction animateSprite 
@@ -27,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (countdown < maxRepeats){
-            setTimeout (animateSprite,120) //changer de sprite toutes les 0.2s (recall animeteSprite de façon récursive)
+            setTimeout (animateSprite,100) //changer de sprite toutes les 0.2s (recall animeteSprite de façon récursive)
         }
     }
 
