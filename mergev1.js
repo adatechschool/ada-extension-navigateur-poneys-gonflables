@@ -11,7 +11,6 @@ document.body.appendChild(definitionPopup);
 
 
 
-
 async function fetchDefinition(word) {
     try {
         const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
@@ -92,6 +91,7 @@ const Angry = [
 ]
 
 let spriteInterval; // Variable pour stocker l'intervalle d'animation des sprites
+let spriteImg; // Variable pour stocker les images 
 const popup = document.getElementById("definition-popup");
 popup.style.border = "2px solid #d55716"; //bordure
 popup.style.textAlign = "center"; //position du texte
@@ -126,9 +126,6 @@ function showDefinitionPopup(event, definition, state) {
     // Ajouter un élément img 
     spriteImg = document.createElement("img");
     popup.appendChild(spriteImg);
-    spriteImg.style.maxWidth = "100%";
-    spriteImg.style.maxHeight = "100%";
-    spriteImg.style.objectFit = "contain";
 
     popup.style.left = `${posX}px`;
     popup.style.top = `${posY}px`;
@@ -235,7 +232,7 @@ async function handleWordHover(event, word) {
     }
 }
 
-// Ajouter un événement au survol de la souris
+//Ajouter un événement au survol de la souris
 document.addEventListener("mouseup", async (event) => {
     const selectedText = textSelection();
 
@@ -255,5 +252,53 @@ document.addEventListener("mousedown", () => {
     resetInactivityTimer(); //Réinitialise le timer d'inactivité 
 });
 
+async function CallDefinition(event) {
+
+    //Etape 1 : Je récupère de la data lorsqu'on surligne des éléments
+    let selectedText = textSelection()
+
+    //Etape2 : récupérer un mot 
+    if (selectedText && event.target.nodeType === Node.ELEMENT_NODE) {
+        const word = selectedText.split(" ")[0]; // Prendre le premier mot
+
+    //Etape 3 : Récupérer la définition du mot grace à l'API
+    let result = await fetchDefinition(word)
+    let definition = result.definition;
+    let state = result.found;
+
+    //Etape 4 : Aficher la popup avec la définition et l'animation 
+    if (definition) {
+        showDefinitionPopup(event, definition, state);
+    } else {
+        hideDefinitionPopup()
+    }
+} else {
+    hideDefinitionPopup()
+}
+
+
+}
+
 
 // console.log(chrome.runtime.getURL("img/perso1.PNG"));
+
+//détecter les cliques sur les boutons 
+
+document.addEventListener("DOMContentLoaded", () => {
+const defButton = document.getElementById("def");
+const tradButton = document.getElementById("trad"); 
+const noteButton = document.getElementById("note");
+
+defButton.addEventListener("click", () => {
+    chrome.runtime.sendMessage({action:"def"});
+    document.addEventListener("mouseup",CallDefinition)
+});
+
+tradButton.addEventListener("click", ()=> {
+    chrome.runtime.sendMessage({action:"trad"})
+});
+
+noteButton.addEventListener("click", ()=> {
+    chrome.runtime.sendMessage({action:"note"})
+});
+});

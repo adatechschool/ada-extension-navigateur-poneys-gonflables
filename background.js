@@ -5,3 +5,28 @@ chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installée");
 });
 
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    switch (request.action) {
+        case "def":
+            defFunction();
+            break;
+        case "trad":
+            tradFunction();
+            break;
+        case "note":
+            noteFunction();
+            break;
+    }
+});
+
+function defFunction() {
+    console.log("un mot doit être défini");
+}
+
+function tradFunction() {
+    console.log("un mot doit être traduit");
+}
+
+function noteFunction() { 
+    console.log("ajoute des annotations");
+}
