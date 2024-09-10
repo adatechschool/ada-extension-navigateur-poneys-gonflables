@@ -1,0 +1,11 @@
+button {
+    padding : 15px;
+    background: linear-gradient(49deg, rgba(170,38,23,1) 17%, rgba(218,83,24,1) 43%, rgba(78,127,204,1) 73%);
+    color : white;
+    border-radius: 20%;
+    margin : 10%
+}
+
+button:hover {
+    background: linear-gradient(49deg, rgba(78,127,204,1) 17%, rgba(218,83,24,1) 43%,  rgba(170,38,23,1) 73%);
+}
