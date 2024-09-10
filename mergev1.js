@@ -1,34 +1,3 @@
-// Création et ajout de l'élément "popup" pour afficher la définition et les sprites
-const definitionPopup = document.createElement("div");
-definitionPopup.id = "definition-popup";
-definitionPopup.style.position = "absolute";
-definitionPopup.style.display = "none"; // Cacher la popup par défaut
-definitionPopup.style.backgroundColor = "#fff"; // Fond blanc pour la popup
-definitionPopup.style.border = "1px solid #000"; // Bordure pour mieux visualiser la popup
-definitionPopup.style.padding = "10px"; // Padding pour éviter que le texte colle aux bords
-document.body.appendChild(definitionPopup);
-
-
-
-
-async function fetchDefinition(word) {
-    try {
-        const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-        const data = await response.json();
-        
-        // Vérifie si des données sont retournées et renvoie la définition
-        if (data && data.length > 0 && data[0].meanings.length > 0 && data[0].meanings[0].definitions.length > 0) {
-            return data[0].meanings[0].definitions[0].definition;
-        } else {
-            return "Définition non trouvée."; // Message de remplacement
-        }
-    } catch (error) {
-        console.error("Erreur lors de la récupération de la définition :", error);
-        return "Erreur lors de la récupération de la définition."; // Message d'erreur
-    }
-}
-
-// Liste des sprites
 const spriteList = [
     chrome.runtime.getURL("img/perso1.PNG"),
     chrome.runtime.getURL("img/perso2.PNG"),
@@ -36,113 +5,150 @@ const spriteList = [
     chrome.runtime.getURL("img/perso4.PNG")
 ];
 
-let spriteInterval; // Variable pour stocker l'intervalle d'animation des sprites
+// Fonction pour récupérer la définition depuis l'API
+async function fetchDefinition(word) {
+    console.log(`Tentative de récupération de la définition pour le mot : ${word}`);
+    try {
+        const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+        
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP : ${response.status}`);
+        }
 
+        const data = await response.json();
+        console.log('Données reçues de l\'API :', data);
 
-/* // Liste des sprites
-const spriteList = [
-    '/img/perso1.PNG',
-    '/img/perso2.PNG',
-    '/img/perso3.PNG',
-    '/img/perso4.PNG'
-];
-const spriteList.src = chrome.runtime.getURL("./perso1.PNG", "./perso2.PNG", "./perso3.PNG", ".perso4.png");
-let spriteInterval; // Variable pour stocker l'intervalle d'animation des sprites */
-
-// Fonction pour changer l'image du sprite dans la popup
-/*function changeSprite() {
-    const spriteImg = document.querySelector("#definition-popup img");
-
-    let index = 0;
-    spriteInterval = setInterval(() => {
-        spriteImg.src = spriteList[index];
-        index = (index + 1) % spriteList.length;
-    }, 500); // Change l'image toutes les 500 ms
-}*/
-
-// Fonction pour afficher la popup avec la définition et les sprites
-function showDefinitionPopup(event, definition) {
-    const popup = document.getElementById("definition-popup");
-
-    // Positionner la popup par rapport à l'événement
-    const posX = event.pageX + 10;
-    const posY = event.pageY + 10;
-
-    // Mise à jour du contenu et de la position de la popup
-    popup.innerHTML = `<p>${definition}</p><img src="${chrome.runtime.getURL('img/perso1.PNG')}" alt="Sprite">`;
-
-    // Ajouter un élément img pour les sprites si non existant
-    let spriteImg = popup.querySelector("img");
-    if (!spriteImg) {
-        spriteImg = document.createElement("img");
-        popup.appendChild(spriteImg);
+        if (data && data.length > 0 && data[0].meanings.length > 0 && data[0].meanings[0].definitions.length > 0) {
+            return data[0].meanings[0].definitions[0].definition;
+        } else {
+            return "Définition non trouvée.";
+        }
+    } catch (error) {
+        console.error("Erreur lors de la récupération de la définition :", error);
+        return "Erreur lors de la récupération de la définition.";
     }
+}
 
+// Fonction pour afficher la popup
+function showDefinitionPopup(posX, posY, definition) {
+    const popup = document.createElement("div");
+    popup.classList.add("definition-popup");
+    popup.style.position = "absolute";
     popup.style.left = `${posX}px`;
     popup.style.top = `${posY}px`;
-    popup.style.display = "block"; // Afficher la popup
+    popup.style.backgroundColor = "#fff";
+    popup.style.border = "1px solid #000";
+    popup.style.padding = "10px";
+    popup.style.zIndex = "1000";
+    popup.innerHTML = `<p>${definition}</p><img src="${spriteList[0]}" alt="Sprite">`;
+    document.body.appendChild(popup);
 }
 
-
-
-    // Démarrer l'animation des sprites
-    /*changeSprite();*/
-
-
-// Fonction pour cacher la popup et arrêter l'animation des sprites
+// Fonction pour cacher la popup
 function hideDefinitionPopup() {
-    const popup = document.getElementById("definition-popup");
-    popup.style.display = "none"; // Cacher la popup
-
-    // Arrêter l'animation des sprites
-    clearInterval(spriteInterval);
+    const popups = document.querySelectorAll(".definition-popup");
+    popups.forEach(popup => popup.remove());
 }
 
-// Fonction pour sélectionner le texte surligné
-function textSelection() {
-    const selectedObject = window.getSelection();
-    const selectedText = selectedObject.toString().trim();
-
-    console.log("Texte sélectionné :", selectedText); // Debug
-
-    return selectedText;
+// Fonction pour sauvegarder les définitions dans le localStorage
+function saveToLocalStorage(word, definition, posX, posY) {
+    let savedDefinitions = JSON.parse(localStorage.getItem("definitions")) || [];
+    savedDefinitions.push({ word, definition, posX, posY });
+    localStorage.setItem("definitions", JSON.stringify(savedDefinitions));
 }
 
-// Fonction pour récupérer la définition du mot à partir de l'API
+// Fonction pour ajouter un marqueur à un mot
+function addMarkerToWord(word) {
+    const bodyText = document.body.innerHTML;
+    const annotatedText = `
+        <span class="annotated-word" data-word="${word}">
+            ${word}
+            <span class="marker" title="Définition disponible">ⓘ</span>
+        </span>
+    `;
+    
+    document.body.innerHTML = bodyText.split(word).join(annotatedText);
+}
 
-// Fonction principale pour gérer l'affichage de la définition
-async function handleWordHover(event, word) {
-    console.log("Mot à définir :", word); // Debug
+// Fonction pour gérer la sélection de texte et ajouter un marqueur
+document.addEventListener('mouseup', async (event) => {
+    hideDefinitionPopup();
 
-    // Récupérer la définition du mot
-    const definition = await fetchDefinition(word);
+    const selection = window.getSelection();
+    const selectedText = selection.toString().trim();
+    
+    if (selectedText) {
+        const definition = await fetchDefinition(selectedText);
+        const posX = event.pageX;
+        const posY = event.pageY;
 
-    if (definition) {
-        // Afficher la popup avec la définition et les sprites si elle existe
-        showDefinitionPopup(event, definition);
-    } else {
-        // Cacher la popup si aucune définition n'est trouvée
+        // Sauvegarde le mot et la définition dans le localStorage
+        saveToLocalStorage(selectedText, definition, posX, posY);
+
+        // Affiche une popup avec la définition
+        showDefinitionPopup(posX, posY, definition);
+    }
+});
+
+// Afficher la popup lors du survol d'un marqueur
+document.addEventListener('mouseover', (event) => {
+    if (event.target.classList.contains('marker')) {
+        const word = event.target.parentElement.getAttribute('data-word');
+        const savedDefinitions = JSON.parse(localStorage.getItem("definitions")) || [];
+        const definitionData = savedDefinitions.find(data => data.word === word);
+        if (definitionData) {
+            showDefinitionPopup(event.pageX, event.pageY, definitionData.definition);
+        }
+    }
+});
+
+// Cacher la popup sur sortie de survol
+document.addEventListener('mouseout', (event) => {
+    if (event.target.classList.contains('marker')) {
         hideDefinitionPopup();
     }
+});
+
+// Fonction pour recharger les définitions sauvegardées et ajouter des marqueurs
+function loadSavedDefinitions() {
+    const savedDefinitions = JSON.parse(localStorage.getItem("definitions")) || [];
+    
+    savedDefinitions.forEach(data => {
+        addMarkerToWord(data.word);
+    });
+
+    if (savedDefinitions.length > 0) {
+        console.log("Mots sauvegardés :", savedDefinitions);
+    } else {
+        console.log("Aucune définition sauvegardée.");
+    }
 }
 
-// Ajouter un événement au survol de la souris
-document.addEventListener("mouseup", async (event) => {
-    const selectedText = textSelection();
+// Charger les définitions sauvegardées au chargement de la page
+window.onload = loadSavedDefinitions;
 
-    // Si du texte est sélectionné et que l'événement se produit sur un élément HTML
-    if (selectedText && event.target.nodeType === Node.ELEMENT_NODE) {
-        const word = selectedText.split(" ")[0]; // Prendre le premier mot
-
-        // Récupérer la définition du mot
-        await handleWordHover(event, word);
+// CSS pour les marqueurs et les popups
+const style = document.createElement('style');
+style.textContent = `
+    .annotated-word {
+        position: relative;
+        display: inline;
+        background-color: rgba(255, 255, 0, 0.3); /* Surlignement discret */
+        padding: 0 3px;
     }
-});
-
-// Ajouter un événement lorsque la souris quitte l'élément
-document.addEventListener("mousedown", () => {
-    hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
-});
-
-
-console.log(chrome.runtime.getURL("img/perso1.PNG"));
+    .marker {
+        font-size: 0.8em;
+        color: blue;
+        cursor: help;
+        border-bottom: 1px dotted;
+        margin-left: 5px;
+    }
+    .definition-popup {
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #000;
+        padding: 10px;
+        z-index: 1000;
+    }
+`;
+document.head.appendChild(style);
