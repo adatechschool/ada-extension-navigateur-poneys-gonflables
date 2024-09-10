@@ -1,17 +1,3 @@
-<<<<<<< Updated upstream
-{
-    "manifst_version":3,
-    "name":"DefineAssistant",
-    "version":0.1,
-    "description":"Recherche de définitions",
-    "action": {
-
-    },
-    "permissions": ["activeTab",
-    "contextMenus",
-    "storage"],
-    "host-premissions": ["https://*/*"]
-=======
 {
   "manifest_version": 3,
   "name": "Définition au survol",
@@ -22,15 +8,41 @@
     "contextMenus",
     "scripting"
   ],
+  "host_permissions": ["https://*/*"],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-       "js": ["multipoubelles.js"], 
-       "css": ["style.css"] 
+      "js": ["mergev1.js"]
+    }
+  ],
+"web_accessible_resources": [
+    {
+      "resources": [
+        "animationPerso/dino/Dinoimg/updino1.png",
+        "animationPerso/dino/Dinoimg/updino2.png",
+        "animationPerso/dino/Dinoimg/updino3.png",
+        "animationPerso/dino/Dinoimg/updino4.png",
+        "animationPerso/dino/Dinoimg/updino6.png",
+        "animationPerso/dino/Dinoimg/Happydino1.png",
+        "animationPerso/dino/Dinoimg/Happydino2.png",
+        "animationPerso/dino/Dinoimg/Happydino3.png",
+        "animationPerso/dino/Dinoimg/Happydino4.png",
+        "animationPerso/dino/Dinoimg/Happydino5.png",
+        "animationPerso/dino/Dinoimg/Happydino6.png",
+        "animationPerso/dino/Dinoimg/Happydino7.png",
+        "animationPerso/dino/Dinoimg/sleepingdino1.png",
+        "animationPerso/dino/Dinoimg/sleepingdino2.png",
+        "animationPerso/dino/Dinoimg/sleepingdino3.png",
+        "animationPerso/dino/Dinoimg/sleepingdino4.png",
+        "animationPerso/dino/Dinoimg/AngryDino1.PNG",
+        "animationPerso/dino/Dinoimg/AngryDino2.PNG",
+        "animationPerso/dino/Dinoimg/AngryDino3.PNG",
+        "animationPerso/dino/Dinoimg/AngryDino4.PNG"
+      ],
+      "matches": ["<all_urls>"]
     }
   ]
->>>>>>> Stashed changes
 }
