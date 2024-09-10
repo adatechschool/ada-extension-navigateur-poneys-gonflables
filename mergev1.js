@@ -48,7 +48,8 @@ function showDefinitionPopup(event, definition) {
     const posY = event.pageY + 10;
 
     // Mise à jour du contenu et de la position de la popup
-    popup.innerHTML += `<p>${definition}</p><img src="${chrome.runtime.getURL('img/perso1.PNG')}" alt="Sprite">` //Utilisation de innerHTML pour permettre du HTML dans la définition
+    popup.innerHTML = `<p>${definition}</p><img src="${chrome.runtime.getURL('img/perso1.PNG')}" alt="Sprite">` //Utilisation de innerHTML pour permettre du HTML dans la définition
+    console.log(popup.innerHTML)
     //popup.appendChild(definition)
 
     // Ajouter un élément img pour les sprites si non existant
@@ -92,7 +93,7 @@ function textSelection() {
 // Fonction pour récupérer la définition du mot à partir de l'API
 
 // Fonction principale pour gérer l'affichage de la définition
-/*async function handleWordHover(event, word) {
+async function handleWordHover(event, word) {
     console.log("Mot à définir :", word); // Debug
 
     // Récupérer la définition du mot
@@ -105,7 +106,7 @@ function textSelection() {
         // Cacher la popup si aucune définition n'est trouvée
         hideDefinitionPopup();
     }
-} */
+} 
 
 
 // Ajouter un événement au survol de la souris
@@ -126,9 +127,9 @@ function textSelection() {
 console.log("test",highlightText)*/
 
 // Ajouter un événement lorsque la souris quitte l'élément
-/* document.addEventListener("mousedown", () => {
+document.addEventListener("mouseup", () => {
     hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
-}); */
+});
 
 //console.log(chrome.runtime.getURL("img/perso1.PNG"));
 
@@ -139,20 +140,16 @@ function addNote(event, createNote) {
     setTimeout(function() {
     document.querySelector("input[type='text'], textarea").focus();
     });
-    definitionPopup.appendChild(createNote);
+    definitionPopup.replaceChild(createNote,p)
+    //definitionPopup.appendChild(createNote);
     
-    showDefinitionPopup(event, createNote);
+    showDefinitionPopup(event, "");
 
     //console.log(typeof(createNote))
 }
 
 document.addEventListener("mouseup", (event) => {
-    //const selectedText = textSelection();
+    const note = {}
 
-    // Si du texte est sélectionné et que l'événement se produit sur un élément HTML
-    if (event.target.nodeType === Node.ELEMENT_NODE) {
-        const note = {}
-
-        addNote(event, note);// ouvrir une note
-    }
+    addNote(event, note);// ouvrir une note
 });
