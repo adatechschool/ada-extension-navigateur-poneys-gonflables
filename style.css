@@ -1,0 +1,14 @@
+.highlighted-word {
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.definition-popup {
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    max-width: 300px;
+}
