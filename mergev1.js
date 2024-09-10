@@ -133,12 +133,12 @@ console.log("test",highlightText)*/
 //console.log(chrome.runtime.getURL("img/perso1.PNG"));
 
 function addNote(event, createNote) {
-    createNote = document.createElement("input");
+    createNote = document.createElement("textarea");
     createNote.setAttribute("contentEditable", "True");
-    createNote.setAttribute("type", "text");
-    window.onload = function() {
-    document.querySelectorame("input[type='text']").focus();
-    };
+    createNote.setAttribute("name", "note");
+    setTimeout(function() {
+    document.querySelector("input[type='text'], textarea").focus();
+    });
     definitionPopup.appendChild(createNote);
     
     showDefinitionPopup(event, createNote);
