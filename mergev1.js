@@ -103,6 +103,34 @@ popup.style.borderRadius= "5px 80px / 5px 80px "; // effet arrondie en haut a ga
 popup.style.marginLeft = "10%"
 popup.style.overflowWrap = "break-word";
 
+function createButton(name, position,fonction) {
+const defButton = document.createElement("button");
+defButton.textContent = name ;
+defButton.style.position = "fixed";
+defButton.style.top = "10px";
+defButton.style.right = "10px";
+defButton.style.backgroundColor = "#ff4d4d";
+defButton.style.color = "#fff";
+defButton.style.border = "none";
+defButton.style.padding = "10px";
+defButton.style.cursor = "pointer";
+defButton.style.zIndex = "1000";
+defButton.style.marginTop = position
+document.body.appendChild(defButton);
+return defButton
+
+}
+
+function test1() {
+    console.log('nous sommes des soeurs jummelle')
+}
+function test2() {
+    console.log('fait sous le signe des jumeaux')
+}
+let def = createButton("Définir","0%",)
+let note= createButton("Annoter","5%",)
+def.addEventListener('click', CallDefinition)
+note.addEventListener('click',showNotePopup)
 
 let isAnimating = false;
 let isSleeping = false;
@@ -111,7 +139,8 @@ let inactivityTimer;
 
 
 // Fonction pour afficher la popup avec la définition et les sprites
-function showDefinitionPopup(event, definition, state) {
+function showDefinitionPopup(event,definition, state,word) {
+
 
     // Positionner la popup par rapport à l'événement
     const posX = event.pageX + 10;
@@ -160,6 +189,40 @@ function showDefinitionPopup(event, definition, state) {
         startAnimation(Angry);
     }
     
+
+}
+
+function showNotePopup(event,word) {
+
+
+    // Positionner la popup par rapport à l'événement
+    const posX = event.pageX;
+    const posY = event.pageY;
+   
+
+   // Mise à jour du contenu et de la position de la popup
+   popup.innerHTML = `<h1>${word}</h1>`,addNote();
+
+   // Ajouter un élément img 
+   spriteImg = document.createElement("img");
+   spriteImg.src = " "
+   popup.appendChild(spriteImg);
+   
+
+   popup.style.left = `${posX}px`;
+   popup.style.top = `${posY}px`;
+   popup.style.display = "block"; // Afficher la popup
+
+
+   // Démarrer l'animation
+   startAnimation(Neutral)
+   
+   document.addEventListener("mouseup", (event) => {
+    const note = {}
+
+    addNote(event, note);// ouvrir une note
+});
+
 }
 
 
@@ -252,43 +315,10 @@ async function handleWordHover(event, word) {
     }
 } 
 
-
-//Ajouter un événement au survol de la souris
- document.addEventListener("mouseup", async (event) => {
-    const selectedText = textSelection();
-
-    // Si du texte est sélectionné et que l'événement se produit sur un élément HTML
-    if (selectedText && event.target.nodeType === Node.ELEMENT_NODE) {
-        const word = selectedText.split(" ")[0]; // Prendre le premier mot
-        
-        // Récupérer la définition du mot
-        await handleWordHover(event, word);
-    }
-}); 
+console.log(chrome.runtime.getURL("img/perso1.PNG"));
 
 
-// Fonction pour gérer la sélection de texte et ajouter un marqueur
-document.addEventListener('mouseup', async (event) => {
-    hideDefinitionPopup(); // Cacher toute popup précédente
 
-    const selection = window.getSelection();
-    const selectedText = selection.toString().trim();
-    
-    if (selectedText) {
-        console.log(`Texte sélectionné : '${selectedText}'`);
-        const definition = await fetchDefinition(selectedText);
-        const posX = event.pageX;
-        const posY = event.pageY;
-
-        // Sauvegarde le mot et la définition dans le localStorage
-        //saveToLocalStorage(selectedText, definition, posX, posY);
-
-        // Affiche une popup avec la définition
-        //showDefinitionPopup(posX, posY, definition, selectedText);
-    }
-});
-
-//**ajouter un replace si pas vide**.
 function addNote(event, createNote) {
     createNote = definitionPopup.appendChild(document.createElement("textarea"));
     createNote.setAttribute("contentEditable", "True");
@@ -349,22 +379,34 @@ document.addEventListener("mouseup", () => {
 
 async function CallDefinition(event) {
 
+addEventListener('mouseup', mousupdef)
+
+}
+
+async function mousupdef(event) {
+    console.log("début CallDefinition")
     //Etape 1 : Je récupère de la data lorsqu'on surligne des éléments
     let selectedText = textSelection()
-
+    console.log("selectedText = "+selectedText)
     //Etape2 : récupérer un mot 
     if (selectedText && event.target.nodeType === Node.ELEMENT_NODE) {
         const word = selectedText.split(" ")[0]; // Prendre le premier mot
+        console.log("word= "+word)
 
     //Etape 3 : Récupérer la définition du mot grace à l'API
     let result = await fetchDefinition(word)
     let definition = result.definition;
     let state = result.found;
+    console.log("definition = "+definition)
+    console.log("state = "+state)
 
     //Etape 4 : Aficher la popup avec la définition et l'animation 
     if (definition) {
-        showDefinitionPopup(event, definition, state);
+        
+        showDefinitionPopup(event,definition, state, word);
+        
     } else {
+        console.log("definition pas ok")
         hideDefinitionPopup()
     }
 } else {
