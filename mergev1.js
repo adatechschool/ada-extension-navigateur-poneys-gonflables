@@ -113,22 +113,44 @@ let inactivityTimer;
 // Fonction pour afficher la popup avec la définition et les sprites
 function showDefinitionPopup(event, definition, state) {
 
-     // Positionner la popup par rapport à l'événement
-     const posX = event.pageX + 10;
-     const posY = event.pageY + 10;
-    
+    // Positionner la popup par rapport à l'événement
+    const posX = event.pageX + 10;
+    const posY = event.pageY + 10;
+   
 
-    // Mise à jour du contenu et de la position de la popup
-    popup.innerHTML = `<p>${definition}</p>`, addNote();
+   // Mise à jour du contenu et de la position de la popup
+   popup.innerHTML = `<p>${definition}</p>`, addNote();
+
+   // Ajouter un élément img 
+   spriteImg = document.createElement("img");
+   popup.appendChild(spriteImg);
+
+   popup.style.left = `${posX}px`;
+   popup.style.top = `${posY}px`;
+   popup.style.display = "block"; // Afficher la popup
+
+
+    // console.log(`Affichage de la popup pour le mot '${word}' à '(${posX}', '${posY})'`);
+    // hideDefinitionPopup(); // Cache les popups précédentes
+
+    // const popup = document.createElement("div");
+    // popup.classList.add("definition-popup");
+    // popup.style.position = "absolute";
+    // popup.style.left = `${posX}px`;
+    // popup.style.top = `${posY}px`;
+    // popup.style.backgroundColor = "#fff";
+    // popup.style.border = "1px solid #000";
+    // popup.style.padding = "10px";
+    // popup.style.zIndex = "1000";
+    // popup.innerHTML = 
+    //     `<p>${definition}</p>`,addNote() 
+    //     `<img src="${Neutral}" alt="Sprite">`
+    // ;
+    // document.body.appendChild(popup);
 
     // Ajouter un élément img 
-    spriteImg = document.createElement("img");
-    popup.appendChild(spriteImg);
-
-    popup.style.left = `${posX}px`;
-    popup.style.top = `${posY}px`;
-    popup.style.display = "block"; // Afficher la popup
-
+    // spriteImg = document.createElement("img");
+    // popup.appendChild(spriteImg);
 
     // Démarrer l'animation
     if(state === true) { // Si on récupère une définition on lance l'animation happy
@@ -231,7 +253,7 @@ async function handleWordHover(event, word) {
 } 
 
 
-// Ajouter un événement au survol de la souris
+//Ajouter un événement au survol de la souris
  document.addEventListener("mouseup", async (event) => {
     const selectedText = textSelection();
 
@@ -245,23 +267,41 @@ async function handleWordHover(event, word) {
 }); 
 
 
-// Ajouter un événement lorsque la souris quitte l'élément
-document.addEventListener("mouseup", () => {
-    hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
+// Fonction pour gérer la sélection de texte et ajouter un marqueur
+document.addEventListener('mouseup', async (event) => {
+    hideDefinitionPopup(); // Cacher toute popup précédente
+
+    const selection = window.getSelection();
+    const selectedText = selection.toString().trim();
+    
+    if (selectedText) {
+        console.log(`Texte sélectionné : '${selectedText}'`);
+        const definition = await fetchDefinition(selectedText);
+        const posX = event.pageX;
+        const posY = event.pageY;
+
+        // Sauvegarde le mot et la définition dans le localStorage
+        //saveToLocalStorage(selectedText, definition, posX, posY);
+
+        // Affiche une popup avec la définition
+        //showDefinitionPopup(posX, posY, definition, selectedText);
+    }
 });
 
-//console.log(chrome.runtime.getURL("img/perso1.PNG"));
-
+//**ajouter un replace si pas vide**.
 function addNote(event, createNote) {
-    //showDefinitionPopup(event, "");
     createNote = definitionPopup.appendChild(document.createElement("textarea"));
     createNote.setAttribute("contentEditable", "True");
     createNote.setAttribute("name", "note");
     setTimeout(function() {
     document.querySelector("input[type='text'], textarea").focus();
     });
+    noteContent = document.querySelector("textarea").value
+
+    alert(noteContent)
+    console.log(noteContent)
         
-     //**ajouter un replace si pas vide**.
+    
 
     //console.log(typeof(createNote))
 }
@@ -272,12 +312,41 @@ document.addEventListener("mouseup", (event) => {
     addNote(event, note);// ouvrir une note
 });
 
+function showNotePopup(event, state) {
+
+    // Positionner la popup par rapport à l'événement
+    const posX = event.pageX - 10;
+    const posY = event.pageY - 10;
+   
+    note = addNote()
+
+   // Mise à jour du contenu et de la position de la popup
+   popup.innerHTML = note;
+
+   // Ajouter un élément img 
+   spriteImg = document.createElement("img");
+   popup.appendChild(spriteImg);
+
+   popup.style.left = `${posX}px`;
+   popup.style.top = `${posY}px`;
+   popup.style.display = "block"; // Afficher la popup
+
+
+   // Démarrer l'animation
+   if(state === true) { // Si on récupère une définition on lance l'animation happy
+       startAnimation(Happy);
+}
+   else { // si on ne récupère pas de définition on lance une animation angry 
+       startAnimation(Angry);
+   }
+   
 
 // Ajouter un événement lorsque la souris quitte l'élément
-document.addEventListener("mousedown", () => {
+document.addEventListener("mouseup", () => {
     hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
     resetInactivityTimer(); //Réinitialise le timer d'inactivité 
 });
+}
 
 async function CallDefinition(event) {
 
@@ -329,3 +398,110 @@ noteButton.addEventListener("click", ()=> {
     chrome.runtime.sendMessage({action:"note"})
 });
 });
+
+// // Fonction pour sauvegarder les définitions dans le localStorage
+// function saveToLocalStorage(word, definition, posX, posY) {
+//     const url = window.location.href;
+//     let savedDefinitions = JSON.parse(localStorage.getItem(url)) || [];
+
+//     // Vérifie si le mot est déjà sauvegardé pour cette page
+//     if (!savedDefinitions.some(entry => entry.word === word)) {
+//         savedDefinitions.push({ word, definition, posX, posY });
+//         localStorage.setItem(url, JSON.stringify(savedDefinitions));
+//         console.log(`Mot '${word}' enregistré pour cette page.`);
+
+//         // Ajouter le marqueur au mot
+//         addMarkerToWord(word);
+//     } else {
+//         console.log(`Le mot '${word}' est déjà enregistré pour cette page.`);
+//     }
+// }
+
+// function addMarkerToWord(word) {
+//     // Vérifiez si le mot a déjà un marqueur
+//     if (!document.querySelector(`.annotated-word[data-word="${word}"]`)) {
+//         const bodyText = document.body.innerHTML;
+//         const annotatedText = 
+//             `<span class="annotated-word" data-word="${word}">
+//                 ${word}
+//                 <span class="marker" title="Définition disponible">📘</span>
+//             </span>`
+//         ;
+
+//         // Remplacer la première occurrence du mot avec le texte annoté
+//         const regex = new RegExp(`\\b${word}\\b`, 'i');
+//         document.body.innerHTML = bodyText.replace(regex, annotatedText);
+//     }
+// }
+
+
+// // Afficher la popup lors du survol d'un marqueur
+// document.addEventListener('mouseover', (event) => {
+//     if (event.target.classList.contains('marker')) {
+//         const word = event.target.parentElement.getAttribute('data-word');
+//         console.log(`Survol du marqueur pour le mot '${word}'`);
+//         const savedDefinitions = JSON.parse(localStorage.getItem(window.location.href)) || [];
+//         const definitionData = savedDefinitions.find(data => data.word === word);
+//         if (definitionData) {
+//             showDefinitionPopup(event.pageX, event.pageY, definitionData.definition, word);
+//         }
+//     }
+// });
+
+
+// // Fonction pour recharger les définitions sauvegardées et ajouter des marqueurs
+// function loadSavedDefinitions() {
+//     const savedDefinitions = JSON.parse(localStorage.getItem(window.location.href)) || [];
+    
+//     // Supprimer tous les anciens marqueurs avant de recharger
+//     document.querySelectorAll('.annotated-word').forEach(span => span.remove());
+
+//     savedDefinitions.forEach(data => {
+//         console.log(`Rechargement du marqueur pour le mot '${data.word}'`);
+//         addMarkerToWord(data.word);
+//     });
+
+//     if (savedDefinitions.length > 0) {
+//         console.log("Mots sauvegardés :", savedDefinitions);
+//     } else {
+//         console.log("Aucune définition sauvegardée.");
+//     }
+// }
+
+// // Fonction pour ajouter un bouton "Supprimer tout" en haut à droite
+// function addDeleteAllButton() {
+//     const deleteAllButton = document.createElement("button");
+//     deleteAllButton.textContent = "Supprimer tout";
+//     deleteAllButton.style.position = "fixed";
+//     deleteAllButton.style.top = "10px";
+//     deleteAllButton.style.right = "10px";
+//     deleteAllButton.style.backgroundColor = "#ff4d4d";
+//     deleteAllButton.style.color = "#fff";
+//     deleteAllButton.style.border = "none";
+//     deleteAllButton.style.padding = "10px";
+//     deleteAllButton.style.cursor = "pointer";
+//     deleteAllButton.style.zIndex = "1000";
+    
+//     document.body.appendChild(deleteAllButton);
+
+//     // Événement pour supprimer tout le localStorage
+//     deleteAllButton.addEventListener("click", () => {
+//         if (confirm("Es-tu sûr de vouloir supprimer toutes les définitions sauvegardées ?")) {
+//             localStorage.clear();  // Supprime tout le localStorage
+//             console.log("Tout le contenu du localStorage a été supprimé.");
+
+//             // Supprimer tous les marqueurs de mots
+//             document.querySelectorAll('.annotated-word').forEach(span => span.remove());
+
+//             alert("Toutes les définitions ont été supprimées.");
+//         }
+//     });
+// }
+
+
+
+// // Charger les définitions sauvegardées et ajouter le bouton de suppression tout au chargement de la page
+// window.onload = function() {
+//     loadSavedDefinitions();  // Recharge les définitions sauvegardées
+//     addDeleteAllButton();    // Ajoute le bouton "Supprimer tout"
+// };
