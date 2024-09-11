@@ -6,7 +6,8 @@
   "permissions": [
     "activeTab",
     "contextMenus",
-    "scripting"
+    "scripting",
+    "tabs"
   ],
   "host_permissions": ["https://*/*"],
   "background": {
@@ -14,13 +15,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["*://*/*"],
       "js": ["mergev1.js"]
     }
   ],
-  "action": {
-    "default_popup": "popup.html"
-  },
 "web_accessible_resources": [
     {
       "resources": [
