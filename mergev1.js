@@ -298,7 +298,6 @@ function addNote(event, createNote) {
     });
     noteContent = document.querySelector("textarea").value
 
-    alert(noteContent)
     console.log(noteContent)
         
     
