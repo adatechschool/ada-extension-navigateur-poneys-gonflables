@@ -119,7 +119,7 @@ function showDefinitionPopup(event, definition, state) {
     
 
     // Mise à jour du contenu et de la position de la popup
-    popup.innerHTML += `<p>${definition}</p>`;
+    popup.innerHTML = `<p>${definition}</p>`, addNote();
 
     // Ajouter un élément img 
     spriteImg = document.createElement("img");
@@ -244,9 +244,6 @@ async function handleWordHover(event, word) {
     }
 }); 
 
-/*highlightText = textSelection()
-
-console.log("test",highlightText)*/
 
 // Ajouter un événement lorsque la souris quitte l'élément
 document.addEventListener("mouseup", () => {
@@ -256,16 +253,15 @@ document.addEventListener("mouseup", () => {
 //console.log(chrome.runtime.getURL("img/perso1.PNG"));
 
 function addNote(event, createNote) {
-    createNote = document.createElement("textarea");
+    //showDefinitionPopup(event, "");
+    createNote = definitionPopup.appendChild(document.createElement("textarea"));
     createNote.setAttribute("contentEditable", "True");
     createNote.setAttribute("name", "note");
     setTimeout(function() {
     document.querySelector("input[type='text'], textarea").focus();
     });
-    //definitionPopup.replaceChild(createNote,p)
-    definitionPopup.appendChild(createNote);
-    
-    showDefinitionPopup(event, "");
+        
+     //**ajouter un replace si pas vide**.
 
     //console.log(typeof(createNote))
 }
