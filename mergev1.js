@@ -90,12 +90,12 @@ const Angry = [
 
 let spriteInterval; // Variable pour stocker l'intervalle d'animation des sprites
 let spriteImg; // Variable pour stocker les images 
+//Création popup pour les déifinition 
 const popup = document.getElementById("definition-popup");
 popup.style.border = "2px solid #d55716"; //bordure
 popup.style.textAlign = "center"; //position du texte
 popup.style.width ="400px" // largeur de la popup
 popup.style.maxWidth = "100%"; // largeur maximal qu'elle peux atteindre (en cas de texte trop long)
-// popup.style.display = "inline-block" ; 
 popup.style.height= "230px"; //hauteur de la popup
 popup.style.maxHeight="100%"; // hauteur maximal qu'elle peux atteindre (en cas de texte trop long )
 popup.style.padding = "10px"; // espacement intérieur 
@@ -103,41 +103,60 @@ popup.style.borderRadius= "5px 80px / 5px 80px "; // effet arrondie en haut a ga
 popup.style.marginLeft = "10%"
 popup.style.overflowWrap = "break-word";
 
+//Création popup pour les annotations
+const notePopup = document.createElement("div");
+notePopup.id = "note-popup";
+notePopup.style.position = "absolute";
+notePopup.style.display = "none"; // Cacher par défaut
+notePopup.style.backgroundColor = "#fff"; 
+notePopup.style.border = "4px dashed #d55716"; 
+notePopup.style.padding = "10px"; 
+document.body.appendChild(notePopup);
+
+
 function createButton(name, position,fonction) {
 const defButton = document.createElement("button");
 defButton.textContent = name ;
 defButton.style.position = "fixed";
 defButton.style.top = "10px";
 defButton.style.right = "10px";
-defButton.style.backgroundColor = "#ff4d4d";
+defButton.style.background = "linear-gradient(49deg, rgba(170,38,23,0.6) 17%, rgba(218,83,24,0.6) 43%, rgba(78,127,204,0.6) 73%)";
 defButton.style.color = "#fff";
-defButton.style.border = "none";
-defButton.style.padding = "10px";
+defButton.style.borderRadius = "20%";
+defButton.style.border ="0px solid rgb("
+defButton.style.padding = "20px";
 defButton.style.cursor = "pointer";
 defButton.style.zIndex = "1000";
-defButton.style.marginTop = position
+defButton.style.width ="200px";
+
+defButton.style.marginTop = position;
 document.body.appendChild(defButton);
 return defButton
 
 }
 
-// function test1() {
-//     console.log('nous sommes des soeurs jummelle')
-// }
-// function test2() {
-//     console.log('fait sous le signe des jumeaux')
-// }
 let def = createButton("Définir","0%",)
 let note= createButton("Annoter","5%",)
 def.addEventListener('click', CallDefinition)
-note.addEventListener('click',showNotePopup)
+def.addEventListener('click', () => {
+    note.disabled = true // Désactivation du bouton note lorsqu'on clique sur le bouton def
+})
+note.addEventListener('click', Callnote)
+note.addEventListener ('click', () => {
+    def.disabled = true //Désactive le bouton def lorsqu'on clique sur note 
+})
+
+
 
 let isAnimating = false;
 let isSleeping = false;
 let inactivityTimer;
 
 
-
+function resetButtons() { //Réactive les boutons 
+    def.disabled = false;
+    note.disabled = false;
+}
 // Fonction pour afficher la popup avec la définition et les sprites
 function showDefinitionPopup(event,definition,state) {
 
@@ -183,7 +202,7 @@ function showDefinitionPopup(event,definition,state) {
 
     // Démarrer l'animation
     if(state === true) { // Si on récupère une définition on lance l'animation happy
-        startAnimation(Happy);
+        startAnimation(Happy); 
 }
     else { // si on ne récupère pas de définition on lance une animation angry 
         startAnimation(Angry);
@@ -192,36 +211,39 @@ function showDefinitionPopup(event,definition,state) {
 
 }
 
-function showNotePopup(event,word) {
+function showNotePopup(event, selectedText) {
 
-
+    const notePopup = document.getElementById("note-popup")
     // Positionner la popup par rapport à l'événement
     const posX = event.pageX;
     const posY = event.pageY;
    
 
    // Mise à jour du contenu et de la position de la popup
-   popup.innerHTML = `<p>${word}</p>`,addNote();
+   notePopup.innerHTML = `<h1>${selectedText}</h1>`;
+
+   //Ajout d'une zone de texte pour l'annotation
+   let noteTextArea = document.createElement("textarea");
+   noteTextArea.setAttribute("placeholder","Des commentaire?...");
+   noteTextArea.style.width = "100%" //Ajustement de la taille de la zone de texte
+   noteTextArea.style.height = "100px" // Ajuster la hauter de la zone de texte
+   notePopup.appendChild(noteTextArea);
 
    // Ajouter un élément img 
    spriteImg = document.createElement("img");
    spriteImg.src = " "
-   popup.appendChild(spriteImg);
+   notePopup.appendChild(spriteImg);
    
 
-   popup.style.left = `${posX}px`;
-   popup.style.top = `${posY}px`;
-   popup.style.display = "block"; // Afficher la popup
+   notePopup.style.left = `${posX}px`;
+   notePopup.style.top = `${posY}px`;
+   notePopup.style.display = "block"; // Afficher la popup
 
 
    // Démarrer l'animation
    startAnimation(Neutral)
-   
-   document.addEventListener("mouseup", (event) => {
-    const note = {}
 
-    addNote(event, note);// ouvrir une note
-});
+   
 
 }
 
@@ -273,7 +295,7 @@ function showNotePopup(event,word) {
                 isSleeping = true 
                 startAnimation(Sleep)
             }
-        },20000) // 20 secondes 
+        },300) // 20 secondes 
     }
 
 
@@ -335,12 +357,11 @@ function addNote(event, createNote) {
     //console.log(typeof(createNote))
 }
 
-document.addEventListener("mouseup", (event) => {
-    const note = {}
+async function Callnote(event) {
 
-    addNote(event, note);// ouvrir une note
-});
-
+let selectedText= textSelection()
+showNotePopup(event, selectedText)
+}
 
 async function CallDefinition(event) {
 
@@ -349,6 +370,7 @@ addEventListener('mouseup', mousupdef)
 }
 
 async function mousupdef(event) {
+
     console.log("début CallDefinition")
     //Etape 1 : Je récupère de la data lorsqu'on surligne des éléments
     let selectedText = textSelection()
