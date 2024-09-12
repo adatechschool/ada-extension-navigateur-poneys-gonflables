@@ -121,12 +121,12 @@ return defButton
 
 }
 
-function test1() {
-    console.log('nous sommes des soeurs jummelle')
-}
-function test2() {
-    console.log('fait sous le signe des jumeaux')
-}
+// function test1() {
+//     console.log('nous sommes des soeurs jummelle')
+// }
+// function test2() {
+//     console.log('fait sous le signe des jumeaux')
+// }
 let def = createButton("Définir","0%",)
 let note= createButton("Annoter","5%",)
 def.addEventListener('click', CallDefinition)
@@ -139,7 +139,7 @@ let inactivityTimer;
 
 
 // Fonction pour afficher la popup avec la définition et les sprites
-function showDefinitionPopup(event,definition, state,word) {
+function showDefinitionPopup(event,definition,state) {
 
 
     // Positionner la popup par rapport à l'événement
@@ -148,7 +148,7 @@ function showDefinitionPopup(event,definition, state,word) {
    
 
    // Mise à jour du contenu et de la position de la popup
-   popup.innerHTML = `<p>${definition}</p>`, addNote();
+   popup.innerHTML = `<p>${definition}</p>`,addNote;
 
    // Ajouter un élément img 
    spriteImg = document.createElement("img");
@@ -201,7 +201,7 @@ function showNotePopup(event,word) {
    
 
    // Mise à jour du contenu et de la position de la popup
-   popup.innerHTML = `<h1>${word}</h1>`,addNote();
+   popup.innerHTML = `<p>${word}</p>`,addNote();
 
    // Ajouter un élément img 
    spriteImg = document.createElement("img");
@@ -341,41 +341,6 @@ document.addEventListener("mouseup", (event) => {
     addNote(event, note);// ouvrir une note
 });
 
-function showNotePopup(event, state) {
-
-    // Positionner la popup par rapport à l'événement
-    const posX = event.pageX - 10;
-    const posY = event.pageY - 10;
-   
-    note = addNote()
-
-   // Mise à jour du contenu et de la position de la popup
-   popup.innerHTML = note;
-
-   // Ajouter un élément img 
-   spriteImg = document.createElement("img");
-   popup.appendChild(spriteImg);
-
-   popup.style.left = `${posX}px`;
-   popup.style.top = `${posY}px`;
-   popup.style.display = "block"; // Afficher la popup
-
-
-   // Démarrer l'animation
-   if(state === true) { // Si on récupère une définition on lance l'animation happy
-       startAnimation(Happy);
-}
-   else { // si on ne récupère pas de définition on lance une animation angry 
-       startAnimation(Angry);
-   }
-   
-
-// Ajouter un événement lorsque la souris quitte l'élément
-document.addEventListener("mouseup", () => {
-    hideDefinitionPopup(); // Cacher la popup quand la souris quitte l'élément
-    resetInactivityTimer(); //Réinitialise le timer d'inactivité 
-});
-}
 
 async function CallDefinition(event) {
 
